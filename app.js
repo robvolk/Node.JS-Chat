@@ -1,19 +1,42 @@
-var app = require('express')()
-  , server = require('http').createServer(app)
-  , io = require('socket.io').listen(server);
-server.listen(80);
+var express = require('express')
+  , app = express();
 
 // global list of users
 var users = [];
 
+// configure web server
+app.configure(function () {
+    app.use(express.bodyParser({
+        keepExtensions: true,
+        uploadDir: __dirname + '/tmp',
+        limit: '20mb'
+    }));
+    app.use(app.router)
+        .use(express.static(__dirname + '/js'))
+        .use(express.static(__dirname + '/tmp'));
+});
+
+
+// start the web server
+var server = require('http').createServer(app)
+  , io = require('socket.io').listen(server);
+server.listen(4000);
+
+
+// routes
 app.get('/', function (req, res) {
     res.sendfile(__dirname + '/index.html');
 });
 
-app.get('/client.js', function (req, res) {
-    res.sendfile(__dirname + '/client.js');
+app.post('/attach', function (req, res) {
+    // file upload
+    console.log('uploaded ' + req.files.attachment.path.replace(/^.*[\\\/]/, ''));
+    res.send(req.files.attachment.path.replace(/^.*[\\\/]/, ''));
 });
 
+
+
+// sockets server
 io.sockets.on('connection', function (socket) {
     // new user joined
     socket.on('join', function (user) {
