@@ -1,0 +1,11 @@
+﻿{
+  "name": "chatter",
+  "preferGlobal": true,
+  "version": "0.1.0",
+  "author": "Rob Volk <rob@robvolk.com>",
+  "description": "",
+  "dependencies" : {
+	"express": "*",
+    "socket.io"   :  "*"
+  }
+}
