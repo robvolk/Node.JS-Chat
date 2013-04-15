@@ -3,7 +3,6 @@ var user;
 
 // chat message received
 socket.on('message', function (msg) {
-    console.log(msg);
     addMessage(msg);
 });
 
@@ -21,8 +20,10 @@ socket.on('new-user', function (user) {
 
 // disconnect
 socket.on('disconnect', function (user) {
-    if (user != null)
+    if (user != null) {
+        $('#chat-log').append('<li>' + user.name + ' left</li>');
         $('#user-' + user.name).fadeOut('fast');
+    }
 });
 
 
@@ -53,5 +54,15 @@ function addUser(user) {
 }
 
 function addMessage(msg) {
-    $('#chat-log').append('<li>' + msg.user + ': ' + msg.text + '</li>');
+    console.log(msg);
+
+    msg.text = linkifyUrls(msg.text);
+
+    $('#chat-log').append('<li>' + msg.user + ': ' + msg.text + '</li>')
+        .scrollTop($(this).height())
+}
+
+function linkifyUrls(text) {
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return text.replace(exp, '<a target="_blank" href="$1">$1</a>');
 }

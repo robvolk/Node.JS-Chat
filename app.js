@@ -17,11 +17,14 @@ app.get('/client.js', function (req, res) {
 io.sockets.on('connection', function (socket) {
     // new user joined
     socket.on('join', function (user) {
+        console.log(user.name + ' connected');
+
         // store the user object with this socket
         socket.set('user', user);
-        socket.emit('message', { user: 'system', text: 'Hi ' + user.name + '!  Welcome to Chat Lingual.' });
+        socket.emit('message', { user: '', text: 'Hi ' + user.name + '!  Welcome to Chat Lingual.' });
 
-        console.log(user.name + ' connected');
+        if (users.length == 0)
+            socket.emit('message', { user: '', text: 'It\'s lonley in here.. Invite your friends to chat!' });
 
         // send the list of users to the new person
         users.push(user);
@@ -38,13 +41,15 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         socket.get('user', function (err, user) {
-            console.log(user.name + ' disconnected');
-            
-            // remove the user from the list
-            var index = users.indexOf(user);
-            users.splice(index, 1);
+            if (user != null) {
+                console.log(user.name + ' disconnected');
 
-            socket.broadcast.emit('disconnect', user);
+                // remove the user from the list
+                var index = users.indexOf(user);
+                users.splice(index, 1);
+
+                socket.broadcast.emit('disconnect', user);
+            }
         });
     });
 });

@@ -16,12 +16,31 @@
 
     <script type="text/javascript" src="/client.js"></script>
 
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700|Open+Sans' rel='stylesheet' type='text/css'>
+
     <style type="text/css">
+        h1, h2, h3, h4
+        {
+            font-family: 'Open Sans Condensed', sans-serif;
+            font-weight: bold;
+        }
+        body
+        {
+            font-family: 'Open Sans', sans-serif;
+        }
         #chat-log
         {
             height: 300px;
             background-color: #eee;
+            padding: 10px;
+            overflow-y: scroll;
+            word-wrap: break-word;
         }
+        #chat-log li
+        {
+            margin-bottom: .3em;
+        }
+
     </style>
 
 </head>
@@ -31,13 +50,9 @@
 
         <div class="modal-header">
             <h3>Hi, What's your name?</h3>
-
         </div>
 
         <div class="modal-body">
-
-            <p>You're almost ready to start chatting!</p>
-
             <input type="text" id="name" placeholder="Your name" />
         </div>
 
@@ -59,9 +74,11 @@
 
         <div class="row">
 
-            <div class="span2 offset3">
-                <h4>Users</h4>
-                <ul id="users" class="unstyled"></ul>
+            <div class="span2 offset3 hidden-phone">
+                <h4 class="muted">Users</h4>
+
+                <ul id="users" class="unstyled muted"></ul>
+
             </div>
 
             <div class="span4">
@@ -76,7 +93,7 @@
         <div class="row">
 
             <div class="span4 offset5">
-                <textarea id="msg" class="block" rows="3" cols="20" placeholder="Say something interesting..."></textarea>
+                <textarea id="msg" class="span4" rows="3" cols="20" placeholder="Say something..."></textarea>
             </div>
 
         </div>
