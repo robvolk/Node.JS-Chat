@@ -7,17 +7,24 @@ socket.on('message', function (msg) {
     addMessage(msg);
 });
 
+// user list
+socket.on('users', function (users) {
+    for (var i = 0; i < users.length; i++)
+        addUser(users[i]);
+});
+
 // new user joined
 socket.on('new-user', function (user) {
     $('#chat-log').append('<li>' + user.name + ' joined</li>');
     addUser(user);
 });
 
-// user list
-socket.on('users', function (users) {
-    for (var i = 0; i < users.length; i++)
-        addUser(users[i]);
+// disconnect
+socket.on('disconnect', function (user) {
+    if (user != null)
+        $('#user-' + user.name).fadeOut('fast');
 });
+
 
 $(function () {
     $('.modal').modal('show');
@@ -42,7 +49,7 @@ $(function () {
 });
 
 function addUser(user) {
-    $('#users').append('<li>' + user.name + '</li>');
+    $('#users').append('<li id="user-' + user.name + '">' + user.name + '</li>');
 }
 
 function addMessage(msg) {
